@@ -1,0 +1,19 @@
+#app {
+  background: linear-gradient(
+      to bottom right,
+      rgba(10, 10, 10, 1),
+      rgba(156, 39, 176, 1)
+    )
+    no-repeat center center fixed !important;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover !important;
+  background-position: center;
+  min-height: 100vh;
+}
+
+.button.button.button {
+  background-color: purple;
+  color: #fff;
+}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mini Feed</title>
+    <!-- Import Styles -->
+    <link rel="stylesheet" href="%%url_for('static', filename='assets/styles.css')%%">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <!-- Import Vue.js -->
+    <script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue-toasted@1.1.28/dist/vue-toasted.min.js"></script> 
+    
+  </head>
+  <body>
+    <div id="app">
+        <div class="container" style="padding: 0 0 100px 0; height: 100%">
+            <!-- START ARTICLE FEED -->
+                <div class="column is-8 is-offset-2 ">
+                    <!-- START ARTICLE -->
+                    <div class="card" style="margin-top: 50px; padding: 20px 30px 20px 30px">
+                        <h1 class="is-size-1" style="text-align: center;">Mini Feed</h1>
+
+                        <div v-if="token" class="mt-4">
+                            <textarea v-model="text" class="textarea" placeholder="Text"></textarea>
+                            <button @click="post()" class="button" style="width: 100%; margin-top: 20px;">Post</button>
+                        </div>
+                        <div v-else-if="is_registering">                            
+                            <input v-model="username" class="input" type="text"  style="margin-top: 20px;" placeholder="Username">
+                            <input v-model="email" class="input" type="text"  style="margin-top: 20px;" placeholder="Email">
+                            <input v-model="password" class="input" type="password"  style="margin-top: 20px;" placeholder="Password">
+                            
+                            <button @click="register()" class="button" style="width: 100%; margin-top: 20px;">Register</button>
+
+                            <p>Already registered? <a @click="is_registering = false" >Login</a></p>
+                        </div>
+                        <div v-else>
+                            <input v-model="username" class="input" type="text"  style="margin-top: 20px;" placeholder="Username">
+                            <input v-model="password" class="input" type="password"  style="margin-top: 20px;" placeholder="Password">
+                            <button @click="login()" class="button" style="width: 100%; margin-top: 20px;">Login</button>
+
+                            <p>Not registered yet? <a @click="is_registering = true" >Register</a></p>
+                        </div>
+
+
+                        <p class="mt-4">You can find the documentation to the API at <a href="https://guide-flask.herokuapp.com/docs/swagger">Swagger Documentation</a> and <a href="https://guide-flask.herokuapp.com/docs/redoc">Redoc Documentation</a></p>
+
+                    </div>
+
+                    <div class="card" style="margin-top: 20px;" v-for="post in posts" :key="post.id">
+                        <div class="container" style="padding: 10px 20px 10px 20px">
+                            <p class="is-size-4">{{post.text}}</p>
+    
+                            <hr>
+                            <p>Posted by user {{post.author_id}} at {{post.created}}</p>
+                        </div>
+                    </div>
+
+                    <nav v-if="token" class="pagination mt-4" role="navigation" aria-label="pagination">
+                        <ul class="pagination-list">
+                          <li v-for="index in pages" :key="`page-${index}`">
+                            <a @click="page = index" class="pagination-link" :class="{'is-current': index==page}" aria-label="Page 1" aria-current="page" style="color: #fff">{{index}}</a>
+                          </li>                          
+                        </ul>
+                      </nav>
+                </div>
+
+                
+        </div>
+    </div>
+      
+    </div>
+
+    <!-- Import Js -->
+    <script src="%%url_for('static', filename='main.js')%%"></script>    
+  </body>
+</html>
