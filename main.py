@@ -11,7 +11,7 @@ from factory import create_app
 
 image = Image.open("resources/icon.png")
 menu = (item("Stop", lambda icon: close(icon)),)
-icon = pystray.Icon("name", image, "title", menu)
+icon = pystray.Icon("name", image, "Mini Feed", menu)
 
 
 def close(icon):
