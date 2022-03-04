@@ -47,25 +47,19 @@ def get_user(user_id):
     return json.loads(response), 200
 
 
-@user_controller.route("/<int:user_id>", methods=["PUT"])
+@user_controller.route("/", methods=["PUT"])
 @api.validate(
-    json=UserResponse,
+    json=UserCreate,
     resp=Response(HTTP_200=DefaultResponse),
     tags=["users"],
 )
 @jwt_required()
-def put_user(user_id):
+def put_user():
     """
     Update an user
     """
 
-    user = User.query.get(user_id)
-
-    if user is None:
-        return {"msg": f"There is no user with id {user_id}"}, 404
-
-    if user.id != current_user.id:
-        return {"msg": "You can only change you own information."}, 403
+    user = User.query.get(current_user.id)
 
     data = request.json
 
@@ -73,6 +67,7 @@ def put_user(user_id):
 
     user.username = data["username"]
     user.email = data["email"]
+    user.password = data["password"]
 
     if data["birthdate"]:
         if data["birthdate"].endswith("Z"):
@@ -85,15 +80,15 @@ def put_user(user_id):
     return {"msg": "User was updated."}, 200
 
 
-@user_controller.route("/<int:user_id>", methods=["DELETE"])
+@user_controller.route("/", methods=["DELETE"])
 @api.validate(resp=Response(HTTP_200=DefaultResponse), tags=["users"])
 @jwt_required()
-def delete_user(user_id):
+def delete_user():
     """
     Delete an user
     """
 
-    user = User.query.get(user_id)
+    user = User.query.get(current_user.id)
 
     db.session.delete(user)
     db.session.commit()
@@ -102,7 +97,12 @@ def delete_user(user_id):
 
 
 @user_controller.route("/", methods=["POST"])
-@api.validate(json=UserCreate, resp=Response(HTTP_201=DefaultResponse), security={}, tags=["users"])
+@api.validate(
+    json=UserCreate,
+    resp=Response(HTTP_201=DefaultResponse),
+    security={},
+    tags=["users"],
+)
 def post_user():
     """
     Create an user

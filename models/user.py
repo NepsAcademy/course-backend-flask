@@ -39,6 +39,7 @@ class UserResponse(OrmBase):
     username: str
     email: str
     birthdate: datetime = None
+    created_at: datetime
 
 
 class UserCreate(BaseModel):
