@@ -36,7 +36,9 @@ def suppress_stdout():
 
 
 with suppress_stdout():
-    app = create_app()
+    ConfigClass = os.environ.get("CONFIG_CLASS", "config.DevelopmentConfig")
+
+    app = create_app(ConfigClass)
 
     import logging
 

@@ -1,24 +1,20 @@
+import os
+
 from flask import Flask, render_template
-from config import Config
-
-from flask_sqlalchemy import SQLAlchemy
-
-from spectree import SpecTree, SecurityScheme
-
-from flask_jwt_extended import JWTManager
-
 from flask_cors import CORS
-import jinja2.ext
-
-from utils import fix_spectree_layout
+from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+from spectree import SecurityScheme, SpecTree
 
 db = SQLAlchemy()
+migrate = Migrate()
+jwt = JWTManager()
 api = SpecTree(
     "flask",
+    title="Mini Feed API",
+    version="v.1.0",
     path="docs",
-    title="Mini Feed",
-    version="0.5.0",
-    mode="strict",
     security_schemes=[
         SecurityScheme(
             name="api_key",
@@ -28,29 +24,27 @@ api = SpecTree(
     security={"api_key": []},
 )
 
-jwt = JWTManager()
 
 Flask.jinja_options = {"variable_start_string": "%%", "variable_end_string": "%%"}
 
 
-def create_app():
-
-    import os
-
+def create_app(ConfigClass):
     app = Flask(
         __name__,
         template_folder=os.path.join(os.getcwd(), "templates"),
         static_folder=os.path.join(os.getcwd(), "static"),
     )
 
-    app.config.from_object(Config)
+    app.config.from_object(ConfigClass)
+
+    CORS(app, supports_credentials=True)
 
     jwt.init_app(app)
     db.init_app(app)
 
-    fix_spectree_layout()  # This is a patch to change the layout of the spectree swagger UI
+    from models import Post, User
 
-    CORS(app)
+    migrate.init_app(app, db)
 
     from models import User
 
@@ -64,7 +58,7 @@ def create_app():
     def home():
         return render_template("index.html")
 
-    from controllers import user_controller, posts_controller, auth_controller
+    from controllers import auth_controller, posts_controller, user_controller
 
     app.register_blueprint(auth_controller)
     app.register_blueprint(user_controller)

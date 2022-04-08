@@ -1,9 +1,9 @@
 from datetime import datetime
-
-from pydantic.main import BaseModel
-from factory import db
-from utils.models import OrmBase
 from typing import List
+
+from factory import db
+from pydantic import BaseModel
+from utils.models import OrmBase
 
 
 class Post(db.Model):

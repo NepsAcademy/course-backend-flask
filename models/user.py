@@ -1,20 +1,20 @@
 from datetime import datetime
+from typing import List
+
 from factory import db
-from typing import List, Union
 from pydantic import BaseModel
 from utils.models import OrmBase
-from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.orm import deferred
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 class User(db.Model):
     __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True, index=True)
+    username = db.Column(db.String(64), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String(128), index=True)
 
-    email = db.Column(db.String(128), index=True)
+    email = db.Column(db.String(128), unique=True, nullable=False, index=True)
     birthdate = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -22,7 +22,7 @@ class User(db.Model):
 
     @property
     def password(self):
-        raise AttributeError("password is not a readable attribute")
+        raise AttributeError("Password is not a readable attribute")
 
     @password.setter
     def password(self, password):
@@ -35,18 +35,21 @@ class User(db.Model):
         return f"<User {self.username}>"
 
 
+class UserEdit(BaseModel):
+    username: str
+    email: str
+    birthdate: datetime = None
+
+
+class UserCreate(UserEdit):
+    password: str
+
+
 class UserResponse(OrmBase):
     username: str
     email: str
     birthdate: datetime = None
     created_at: datetime
-
-
-class UserCreate(BaseModel):
-    username: str
-    email: str
-    birthdate: datetime = None
-    password: str
 
 
 class UserResponseList(BaseModel):
