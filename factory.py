@@ -15,6 +15,7 @@ api = SpecTree(
     title="Mini Feed API",
     version="v.1.0",
     path="docs",
+    mode="strict",
     security_schemes=[
         SecurityScheme(
             name="api_key",
