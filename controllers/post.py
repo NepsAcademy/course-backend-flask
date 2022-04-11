@@ -84,9 +84,10 @@ def delete(post_id):
 
 @posts_controller.get("/<int:post_id>")
 @api.validate(
-    resp=Response(HTTP_200=PostResponse, HTTP_404=DefaultResponse), tags=["posts"]
+    resp=Response(HTTP_200=PostResponse, HTTP_404=DefaultResponse),
+    security={},
+    tags=["posts"],
 )
-@jwt_required()
 def get_one(post_id):
     """Get one post"""
 
@@ -111,9 +112,11 @@ POSTS_PER_PAGE = 5
 # Get all
 @posts_controller.route("/", methods=["GET"])
 @api.validate(
-    query=SearchModel, resp=Response(HTTP_200=PostResponseList), tags=["posts"]
+    query=SearchModel,
+    resp=Response(HTTP_200=PostResponseList),
+    security={},
+    tags=["posts"],
 )
-@jwt_required()
 def get_all():
     """Get all posts"""
 
