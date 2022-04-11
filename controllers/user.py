@@ -12,6 +12,17 @@ from utils.responses import DefaultResponse
 user_controller = Blueprint("user_controller", __name__, url_prefix="/users")
 
 
+@user_controller.route("/me", methods=["GET"])
+@api.validate(resp=Response(HTTP_200=UserResponse), tags=["users"])
+@jwt_required()
+def me():
+    """Returns information about the current user"""
+
+    response = UserResponse.from_orm(current_user).json()
+
+    return json.loads(response), 200
+
+
 @user_controller.route("/", methods=["GET"])
 @api.validate(resp=Response(HTTP_200=UserResponseList), tags=["users"])
 @jwt_required()
