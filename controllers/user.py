@@ -67,7 +67,7 @@ def get_user(user_id):
 @jwt_required()
 def put_user():
     """
-    Update an user
+    Update the current user
     """
 
     user = User.query.get(current_user.id)
