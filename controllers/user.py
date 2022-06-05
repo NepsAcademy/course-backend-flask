@@ -48,6 +48,11 @@ def get_user(user_id):
     Get a specified user
     """
 
+    if not (current_user and current_user.role.can_access_sensitive_information):
+        return {
+            "msg": "You don't have permission to access this user information."
+        }, 403
+
     user = User.query.get(user_id)
 
     if user is None:
@@ -91,15 +96,18 @@ def put_user():
     return {"msg": "User was updated."}, 200
 
 
-@user_controller.route("/", methods=["DELETE"])
+@user_controller.route("/<int:user_id>", methods=["DELETE"])
 @api.validate(resp=Response(HTTP_200=DefaultResponse), tags=["users"])
 @jwt_required()
-def delete_user():
+def delete_user(user_id):
     """
     Delete an user
     """
 
-    user = User.query.get(current_user.id)
+    if not (current_user and current_user.role.can_manage_users):
+        return {"msg": "You don't have permission to delete this user."}, 403
+
+    user = User.query.get(user_id)
 
     db.session.delete(user)
     db.session.commit()

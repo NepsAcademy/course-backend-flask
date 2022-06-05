@@ -45,7 +45,7 @@ def update(post_id):
     if post is None:
         return {"msg": "This post does not exists."}, 404
 
-    if post.author_id != current_user.id:
+    if not (post.author_id == current_user.id or current_user.role.can_manage_posts):
         return {"msg": "You can only change your own posts."}, 403
 
     data = request.json
@@ -73,8 +73,8 @@ def delete(post_id):
     if post is None:
         return {"msg": "This post does not exists."}, 404
 
-    if post.author_id != current_user.id:
-        return {"msg": "You can only delete your own posts."}, 403
+    if not (post.author_id == current_user.id or current_user.role.can_manage_posts):
+        return {"msg": "You can't delete this post."}, 403
 
     db.session.delete(post)
     db.session.commit()

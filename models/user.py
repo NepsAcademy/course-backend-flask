@@ -6,6 +6,8 @@ from pydantic import BaseModel
 from utils.models import OrmBase
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from models.role import Role, RoleResponse
+
 
 class User(db.Model):
     __tablename__ = "user"
@@ -18,7 +20,15 @@ class User(db.Model):
     birthdate = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    role_id = db.Column(db.Integer, db.ForeignKey("role.id"))
+
     posts = db.relationship("Post", backref="author", lazy="dynamic")
+
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+
+        if self.role is None:
+            self.role = Role.query.filter_by(name="user").first()
 
     @property
     def password(self):
@@ -50,6 +60,7 @@ class UserResponse(OrmBase):
     email: str
     birthdate: datetime = None
     created_at: datetime
+    role: RoleResponse
 
 
 class UserResponseList(BaseModel):
