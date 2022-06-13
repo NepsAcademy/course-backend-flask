@@ -11,6 +11,7 @@ Esse projeto implementa a API de um feed de notícias. A API inclue:
 - Integração com o Banco de Dados
 - Usuários
 - Postagens
+- Cargos (Roles)
 - Documentação Swagger gerada de forma automática
 - Autenticação (login e logout)
 
@@ -30,9 +31,10 @@ Para instalar as dependências do projeto execute execute:
 pip install -r requirements.txt
 ```
 
-Para criar o banco de dados execute os seguintes comandos:
+Para criar o banco de dados execute os seguintes comandos (no Windows):
 
 ```bash
+set FLASK_APP="main.py"
 flask db init
 flask db migrate
 flask db upgrade
