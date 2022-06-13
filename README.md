@@ -40,7 +40,7 @@ flask db migrate
 flask db upgrade
 ```
 
-Para popular o banco de dados com dados de teste execute os seguintes comandos:
+Para popular o banco de dados com dados de teste execute o seguinte comando:
 
 ```bash
 python populate_database.py
@@ -56,6 +56,4 @@ Em seguida você já pode acessar a API através do endereço http://localhost:5
 
 ### Mudanças
 
-Algumas mudanças foram feitas nesse projeto mas ainda não foram refletidas nas aulas do curso.
-
-- O main.py agora roda o projeto de forma simples, sem o systray.
+Caso alguma mudança tenha sido feita no projeto mas não tenha sido atualizada no curso ela será listada aqui.
