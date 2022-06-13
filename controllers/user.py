@@ -31,6 +31,9 @@ def get_users():
     Get all users
     """
 
+    if not (current_user and current_user.role.can_manage_users):
+        return {"msg": "You don't have permission to view all users."}, 403
+
     users = User.query.all()
 
     response = UserResponseList(

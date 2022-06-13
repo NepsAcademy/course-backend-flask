@@ -4,6 +4,7 @@ from typing import List
 from factory import db
 from pydantic import BaseModel
 from utils.models import OrmBase
+from models.user import UserResponseSimple
 
 
 class Post(db.Model):
@@ -26,7 +27,7 @@ class PostCreate(BaseModel):
 class PostResponse(OrmBase):
     text: str
     created: datetime
-    author_id: int
+    author: UserResponseSimple
 
 
 class PostResponseList(BaseModel):

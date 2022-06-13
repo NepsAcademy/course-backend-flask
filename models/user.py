@@ -63,5 +63,9 @@ class UserResponse(OrmBase):
     role: RoleResponse
 
 
+class UserResponseSimple(OrmBase):
+    username: str
+
+
 class UserResponseList(BaseModel):
     __root__: List[UserResponse]
