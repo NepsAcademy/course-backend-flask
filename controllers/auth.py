@@ -2,7 +2,7 @@ from factory import api
 from flask import Blueprint, request
 from flask_jwt_extended import create_access_token, jwt_required
 from models import User
-from pydantic import BaseModel
+from pydantic.v1 import BaseModel
 from spectree import Response
 from utils.responses import DefaultResponse
 

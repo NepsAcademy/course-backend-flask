@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List
 
 from factory import db
-from pydantic import BaseModel
+from pydantic.v1 import BaseModel
 from utils.models import OrmBase
 from models.user import UserResponseSimple
 

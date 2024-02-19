@@ -5,7 +5,7 @@ from factory import api, db
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import current_user, jwt_required
 from models.post import Post, PostCreate, PostResponse, PostResponseList
-from pydantic import BaseModel
+from pydantic.v1 import BaseModel
 from spectree import Response
 from utils.responses import DefaultResponse
 
@@ -108,6 +108,7 @@ class SearchModel(BaseModel):
 
 
 POSTS_PER_PAGE = 5
+
 
 # Get all
 @posts_controller.route("/", methods=["GET"])
