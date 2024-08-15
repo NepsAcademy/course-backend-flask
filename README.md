@@ -17,7 +17,7 @@ Esse projeto implementa a API de um feed de notícias. A API inclue:
 
 ![Swagger Documentation](images/swagger.png)
 
-Uma demonstração da API está disponível no [Heroku](https://guide-flask.herokuapp.com/docs/swagger).
+Uma demonstração da API está disponível [online](https://minifeed.neps.academy/docs/swagger/).
 
 ### Setup
 
