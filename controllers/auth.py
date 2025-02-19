@@ -6,6 +6,8 @@ from pydantic.v1 import BaseModel
 from spectree import Response
 from utils.responses import DefaultResponse
 
+from datetime import timedelta
+
 auth_controller = Blueprint("auth_controller", __name__, url_prefix="/auth")
 
 
@@ -35,7 +37,7 @@ def login():
     if user and user.verify_password(data["password"]):
         return {
             "access_token": create_access_token(
-                identity=user.username, expires_delta=None
+                identity=user.username, expires_delta=timedelta(days=30)
             )
         }
 
