@@ -127,10 +127,16 @@ def get_all():
     page = int(request.args.get("page", 1))
     reversed = True if request.args.get("reversed", "false") == "true" else False
 
-    posts_query = Post.query.filter(
-        or_(Post.author_id <= 5, Post.author_id == current_user.id),
-        Post.text.ilike(f"%{search}%"),
-    )
+    if current_user:
+        posts_query = Post.query.filter(
+            or_(Post.author_id <= 5, Post.author_id == current_user.id),
+            Post.text.ilike(f"%{search}%"),
+        )
+    else:
+        posts_query = Post.query.filter(
+            Post.author_id <= 5,
+            Post.text.ilike(f"%{search}%"),
+        )
 
     if reversed:
         posts_query = posts_query.order_by(Post.created.desc())
