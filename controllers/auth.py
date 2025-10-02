@@ -1,12 +1,15 @@
-from factory import api
-from flask import Blueprint, request
-from flask_jwt_extended import create_access_token, jwt_required
-from models import User
-from pydantic.v1 import BaseModel
+from factory import api, db
+from sqlalchemy import select
+from pydantic import BaseModel
 from spectree import Response
+
+from flask import Blueprint, request
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import jwt_required
+
+from models import User
 from utils.responses import DefaultResponse
 
-from datetime import timedelta
 
 auth_controller = Blueprint("auth_controller", __name__, url_prefix="/auth")
 
@@ -28,16 +31,18 @@ class LoginResponseMessage(BaseModel):
     tags=["auth"],
 )
 def login():
-    """Login in the system"""
+    """
+    Login in the system
+    """
 
     data = request.json
 
-    user = User.query.filter_by(username=data["username"]).first()
+    user = db.session.scalars(select(User).filter_by(username=data["username"])).first()
 
     if user and user.verify_password(data["password"]):
         return {
             "access_token": create_access_token(
-                identity=user.username, expires_delta=timedelta(days=30)
+                identity=user.username, expires_delta=None
             )
         }
 
@@ -48,5 +53,8 @@ def login():
 @api.validate(resp=Response(HTTP_200=DefaultResponse), tags=["auth"])
 @jwt_required()
 def logout():
-    """Logout user"""
+    """
+    Logout user
+    """
+
     return {"msg": "Logout successfully."}

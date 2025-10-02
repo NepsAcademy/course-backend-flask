@@ -1,9 +1,11 @@
-from datetime import datetime
-from typing import List
+from datetime import datetime, timezone
 
 from factory import db
-from pydantic.v1 import BaseModel
+from pydantic import BaseModel
+from typing import Optional
 from utils.models import OrmBase
+
+from sqlalchemy import select
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from models.role import Role, RoleResponse
@@ -13,22 +15,23 @@ class User(db.Model):
     __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
+    role_id = db.Column(db.Integer, db.ForeignKey("role.id"))
+
     username = db.Column(db.String(64), unique=True, nullable=False, index=True)
-    password_hash = db.Column(db.String(128), index=True)
+    password_hash = db.Column(db.String(256), index=True)
 
     email = db.Column(db.String(128), unique=True, nullable=False, index=True)
     birthdate = db.Column(db.DateTime)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
-    role_id = db.Column(db.Integer, db.ForeignKey("role.id"))
-
-    posts = db.relationship("Post", backref="author", lazy="dynamic")
+    posts = db.relationship("Post", back_populates="author", lazy="dynamic")
+    role = db.relationship("Role", back_populates="users")
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
 
         if self.role is None:
-            self.role = Role.query.filter_by(name="user").first()
+            self.role = db.session.scalars(select(Role).filter_by(name="user")).first()
 
     @property
     def password(self):
@@ -48,7 +51,7 @@ class User(db.Model):
 class UserEdit(BaseModel):
     username: str
     email: str
-    birthdate: datetime = None
+    birthdate: Optional[datetime]
 
 
 class UserCreate(UserEdit):
@@ -58,14 +61,14 @@ class UserCreate(UserEdit):
 class UserResponse(OrmBase):
     username: str
     email: str
-    birthdate: datetime = None
+    birthdate: Optional[datetime]
     created_at: datetime
     role: RoleResponse
 
 
+class UserResponseList(BaseModel):
+    users: list[UserResponse]
+
+
 class UserResponseSimple(OrmBase):
     username: str
-
-
-class UserResponseList(BaseModel):
-    __root__: List[UserResponse]
