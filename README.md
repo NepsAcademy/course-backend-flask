@@ -4,6 +4,8 @@ Esse projeto é parte do curso [Desenvolvimento Web: Backend](https://neps.acade
 
 Para aprender todos os detalhes sobre a implementação desse projeto nós recomendamos participar do curso.
 
+A documentação da API pode ser encontrada em [https://minifeed.neps.academy/docs/swagger/](https://minifeed.neps.academy/docs/swagger/)
+
 ### MiniFeed API
 
 Esse projeto implementa a API de um feed de notícias. A API inclue:
