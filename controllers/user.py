@@ -21,7 +21,7 @@ def me():
     Returns information about the current user
     """
 
-    response = UserResponse.model_validate(current_user).model_dump()
+    response = UserResponse.model_validate(current_user).to_response_dict()
 
     return response, 200
 
@@ -40,8 +40,8 @@ def get_users():
     users = db.session.scalars(select(User)).all()
 
     response = UserResponseList(
-        users=[UserResponse.model_validate(user).model_dump() for user in users]
-    ).model_dump()
+        users=[UserResponse.model_validate(user).to_response_dict() for user in users]
+    ).model_dump(mode="json")
 
     return response, 200
 
@@ -65,7 +65,7 @@ def get_user(user_id):
     if user is None:
         return {"msg": f"There is no user with id {user_id}"}, 404
 
-    response = UserResponse.model_validate(user).model_dump()
+    response = UserResponse.model_validate(user).to_response_dict()
 
     return response, 200
 

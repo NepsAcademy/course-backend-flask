@@ -57,8 +57,8 @@ def get_all():
         page=page,
         pages=pages,
         total=total,
-        posts=[PostResponse.model_validate(post).model_dump() for post in posts],
-    ).model_dump()
+        posts=[PostResponse.model_validate(post).to_response_dict() for post in posts],
+    ).model_dump(mode="json")
 
     return response, 200
 
@@ -78,7 +78,7 @@ def get_one(post_id):
     if not post:
         return {"msg": "This post does not exists."}, 404
 
-    response = PostResponse.model_validate(post).model_dump()
+    response = PostResponse.model_validate(post).to_response_dict()
     return response, 200
 
 
