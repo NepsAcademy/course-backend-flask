@@ -1,5 +1,5 @@
 username,password,email,birthdate,role
-tiagobpires,verysafepassword,tiagobpires@neps.academy,2001-10-22,admin
+testuser,verysafepassword,test_user@neps.academy,2001-10-22,admin
 thiago,verysafepassword,thiago@neps.academy,1998-11-20,admin
 davi,verysafepassword,davi@neps.academy,1998-08-28,user
 joao,verysafepassword,joao@neps.academy,2000-11-12,user
