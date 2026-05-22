@@ -42,7 +42,7 @@ flask db migrate
 flask db upgrade
 ```
 
-Para popular o banco de dados com dados de teste execute o seguinte comando:
+O repositório já vem com um banco de dados de teste, mas caso precise criá-lo novamente, execute:
 
 ```bash
 python populate_database.py
